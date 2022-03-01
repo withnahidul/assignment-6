@@ -5,10 +5,10 @@ const searchPhone = () => {
     // Phone load 
     const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`;
 
+    //console.log(url);
     fetch(url)
         .then(res => res.json())
         .then(loadPhone => displayPhone(loadPhone.data));
-    // .then(loadPhone => displayPhone(loadPhone.data));
 }
 
 
