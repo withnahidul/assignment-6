@@ -1,59 +1,62 @@
 const searchPhone = () => {
     const searchField = document.getElementById('search-field');
     const searchText = searchField.value;
-    console.log(searchText);
-    searchField.value = '';
+
+    // Phone load 
     const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`;
 
-
-    //const url = `https://openapi.programming-hero.com/api/phone/${id}`;
-
-    //console.log(url);
     fetch(url)
         .then(res => res.json())
-        .then(data => displaySearchResult(data.data.slice(0, 20)));
+        .then(loadPhone => displayPhone(loadPhone.data));
+    // .then(loadPhone => displayPhone(loadPhone.data));
 }
-const displaySearchResult = data => {
-    const searchResult = document.getElementById('search-result');
-    data.forEach(data => {
-        //console.log(data);
 
-        // <button onclick="showDetails()" class="btn btn-outline-secondary" type="button">Details</button>
+
+// display Phone
+const displayPhone = data => {
+    const searchResult = document.getElementById('search-result');
+    data.forEach(phone => {
         const div = document.createElement('div');
         div.classList.add('col');
         div.innerHTML = `
-        <div class="card">
-        <img src="${data.image}" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">${data.phone_name}</h5>
-            <h6 class="card-title">${data.brand}</h6>
-            <p class="card-text">ekhane date {data.mainFeatures.releaseDate}"</p>
-            <a href="${data.slug}" class="btn btn-primary">Show Details</a>
-        </div>
-    </div>
-        `;
+            <div>
+                <img src="${phone.image}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">${phone.phone_name}</h5>
+                    <p class="card-text">${phone.brand}</p>
+                </div>
+                <a href="#" onclick='loadPhoneDetail("${phone.slug}")' class="btn btn-primary">Show Details</a>
+            </div>
+            `;
         searchResult.appendChild(div);
-    })
+    });
 }
-//phone data load
-const loadPhoneDetails = mainFeatures => {
-    //console.log(mainFeatures);
+
+// loadPhoneDetail
+const loadPhoneDetail = id => {
     const url = `https://openapi.programming-hero.com/api/phone/${id}`;
+    console.log(url);
     fetch(url)
-        .then(res => res.jeson())
-        .then(data => displayDetail(data.mainFeatures[0]));
+        .then(res => res.json())
+        .then(data1 => displayPhoneDetail(data1.data));
 }
-//details of phone in display
-const displayDetail = data => {
-    console.log(data);
-    const mainFeatures = document.getElementById('features-details');
+
+// displayPhone Details
+const displayPhoneDetail = detailsPhone => {
+
+    const phoneDetails = document.getElementById('phone-details');
+    const div = document.createElement('div');
     div.classList.add('card');
     div.innerHTML = `
-    <img src="${data.mainFeatures.image}" class="card-img-top" alt="...">
+    <img src="${detailsPhone.image}" class="card-img-top" alt="...">
     <div class="card-body">
-      <h5 class="card-title">${data.mainFeatures}</h5>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-      <a href="${data.mainFeatures}" class="btn btn-primary">Go somewhere</a>
+        <h5 class="card-title">${detailsPhone.name}</h5>
+        <p class="card-text">Storage: ${detailsPhone.mainFeatures.storage}</p>
+        <p class="card-text">Display Size: ${detailsPhone.mainFeatures.displaySize}</p>
+        <p class="card-text">Chipset: ${detailsPhone.mainFeatures.chipSet}</p>
+        <p class="card-text">Memory: ${detailsPhone.mainFeatures.memory}</p>
     </div>
     `;
+    phoneDetails.appendChild(div);
 }
+
