@@ -28,7 +28,7 @@ const displaySearchResult = data => {
             <h5 class="card-title">${data.phone_name}</h5>
             <h6 class="card-title">${data.brand}</h6>
             <p class="card-text"> This content is a little bit longer.</p>
-            <a href="${data.slug}" class="btn btn-primary">Go somewhere</a>
+            <a href="${data.slug}" class="btn btn-primary">Show Details</a>
         </div>
     </div>
         `;
