@@ -1,29 +1,21 @@
-const searchPhone = () => {
+const phoneSearch = () => {
     const searchField = document.getElementById('search-field');
     const searchText = searchField.value;
     // clear data
     searchField.value = '';
     if (searchText == '') {
         //give error warning
-        const noSearch = document.getElementById('error-result');
-        noSearch.textContent = '';
-        const notFound = document.createElement('div');
-        notFound.innerHTML = `
-        <div>
-            <h4 class="text-center text-danger id="error-message">Gives some input</h4>
-        </div>
-        `;
-        noSearch.appendChild(notFound);
+        alert('error')
     }
     else {
-        // Load Phone
+        // showing Phone
         const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`;
 
         fetch(url)
             .then(res => res.json())
-            .then(loadPhone => displayPhone(loadPhone.data))
+            .then(showPhone => displayPhone(showPhone.data))
 
-        displayPhoneDetail().textContent = '';
+        displayDetail().textContent = '';
     }
 }
 
@@ -32,11 +24,18 @@ const displayPhone = data => {
     const searchResult = document.getElementById('search-result');
 
     searchResult.textContent = '';
-
-    data.slice(-20).forEach(phone => {
-        const div = document.createElement('div');
-        div.classList.add('col');
-        div.innerHTML = `
+    if (data.length == 0) {
+        const noFound = document.getElementById('error-message');
+        noFound.innerHTML = `
+    <h5>noo result found</h5>
+    `;
+        searchResult.appendChild(noFound);
+    }
+    else {
+        data.slice(-20).forEach(phone => {
+            const div = document.createElement('div');
+            div.classList.add('col');
+            div.innerHTML = `
             <div class="shadow p-3 bg-body rounded">
                 <img src="${phone.image}" class="card-img-top" alt="...">
                 <div class="card-body">
@@ -46,21 +45,22 @@ const displayPhone = data => {
                 <a href="#" onclick='loadPhoneDetail("${phone.slug}")' class="btn btn-primary">Show Details</a>
             </div>
             `;
-        searchResult.appendChild(div);
-    });
+            searchResult.appendChild(div);
+        });
+    }
 }
 
 // load Phone Detail
 const loadPhoneDetail = id => {
     const url = `https://openapi.programming-hero.com/api/phone/${id}`;
-    console.log(url);
+    //console.log(url);
     fetch(url)
         .then(res => res.json())
-        .then(send => displayPhoneDetail(send.data));
+        .then(load => displayDetail(load.data));
 }
 
 // display Phone Details
-const displayPhoneDetail = detailsPhone => {
+const displayDetail = phoneContent => {
 
     const phoneDetails = document.getElementById('phone-details');
     phoneDetails.textContent = '';
@@ -68,17 +68,20 @@ const displayPhoneDetail = detailsPhone => {
     div.classList.add('card');
     div.innerHTML = `
     <div class="border-none shadow p-3 bg-body rounded">
-        <img src="${detailsPhone.image}" class="card-img-top">
+        <img src="${phoneContent.image}" class="card-img-top">
         <div class="card-body">
-            <h5 class="card-title">${detailsPhone.name}</h5>
-            <p class="card-text">Release Date: ${detailsPhone.releaseDate}</p>
-            <p class="card-text">Brand: ${detailsPhone.brand}</p>
-            <p class="card-text">Storage: ${detailsPhone.mainFeatures.storage}</p>
-            <p class="card-text">Display Size: ${detailsPhone.mainFeatures.displaySize}</p>
-            <p class="card-text">Chipset: ${detailsPhone.mainFeatures.chipSet}</p>
-            <p class="card-text">Memory: ${detailsPhone.mainFeatures.memory}</p>
-            <p class="card-text">Sensors: ${detailsPhone.mainFeatures.sensors}</p>
-            <p class="card-text">Others: </p>
+            <h5 class="card-title">${phoneContent.name}</h5>
+            <p class="card-text">Release Date: ${phoneContent.releaseDate ? phoneContent.releaseDate : 'Not found'}</p>
+            <p class="card-text">Brand: ${phoneContent.brand}</p>
+            <p class="card-text">Storage: ${phoneContent.mainFeatures.storage}</p>
+            <p class="card-text">Display Size: ${phoneContent.mainFeatures.displaySize}</p>
+            <p class="card-text">Chipset: ${phoneContent.mainFeatures.chipSet}</p>
+            <p class="card-text">Memory: ${phoneContent.mainFeatures.memory}</p>
+            <p class="card-text">Sensors: ${phoneContent.mainFeatures.sensors}</p>
+          <div>
+          <p class="card-text">Others: </p>
+          <p class="card-text">wlan : ${phoneContent.others ? phoneContent.others.WLAN : 'Not Found'} </p>
+          </div>
         </div>
     <div>
     `;
