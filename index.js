@@ -81,6 +81,10 @@ const displayDetail = phoneContent => {
           <div>
           <p class="card-text">Others: </p>
           <p class="card-text">wlan : ${phoneContent.others ? phoneContent.others.WLAN : 'Not Found'} </p>
+          <p class="card-text">bluetooth : ${phoneContent.others ? phoneContent.others.Bluetooth : 'Not Found'} </p>
+          <p class="card-text">gps : ${phoneContent.others ? phoneContent.others.GPS : 'Not Found'} </p>
+          <p class="card-text">nfc : ${phoneContent.others ? phoneContent.others.NFC : 'Not Found'} </p>
+          <p class="card-text">usb : ${phoneContent.others ? phoneContent.others.USB : 'Not Found'} </p>
           </div>
         </div>
     <div>
